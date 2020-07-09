@@ -38,7 +38,7 @@ public class MusicController {
      */
     @GetMapping(value = "/top/tracks")
     @ApiOperation(value = "Get car by vin")
-    @ApiResponses(value = {@ApiResponse(code = 200, response = List.class, message = "Car response received"),
+    @ApiResponses(value = {@ApiResponse(code = 200, response = List.class, message = "Music tracks response received"),
             @ApiResponse(code = 404, message = "No tracks found"), @ApiResponse(code = 500, message = "Internal error")})
     public ResponseEntity<?> topTracks() {
         LOGGER.info("Processing Top 5 tracks {}");
