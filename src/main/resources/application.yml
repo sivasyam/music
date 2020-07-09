@@ -1,0 +1,23 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: music-app
+
+org:
+  springframework:
+    cache:
+      annotation:
+        Cacheable: true
+
+music:
+  currency:
+    url: https://api.ofx.com/PublicSite.ApiService/OFX/spotrate/Individual/$_FROM_CURRENCY_$/EUR/1?format=json
+  top:
+    tracks:
+      count: 5
+  cache:
+    refresh:
+      interval: 30000
+  tracks:
+    csv: https://storage.googleapis.com/musichub-backend-code-challenge/dsp_streaming_report_us.csv, https://storage.googleapis.com/musichub-backend-code-challenge/dsp_streaming_report_uk.csv
