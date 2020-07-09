@@ -1,7 +1,7 @@
 package de.music.config;
 
 
-import de.music.utils.CSVProcessor;
+import de.music.utils.MusicUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class ScheduledTasks implements ApplicationListener<ApplicationReadyEvent
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
     @Autowired
-    CSVProcessor csvProcessor;
+    MusicUtils musicUtils;
 
     @Autowired
     CacheManager cacheManager;
@@ -32,7 +32,7 @@ public class ScheduledTasks implements ApplicationListener<ApplicationReadyEvent
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         logger.info("Fetching cache on startup");
-        csvProcessor.covertToEUR(USD_CUR, cacheManager);
-        csvProcessor.covertToEUR(GBP_CUR, cacheManager);
+        musicUtils.buildCurrencyCache(USD_CUR, cacheManager);
+        musicUtils.buildCurrencyCache(GBP_CUR, cacheManager);
     }
 }

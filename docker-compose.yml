@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  music-app-container:
+    image: music-app:1
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - /data/music-app
+    ports:
+      - "8081:8080"

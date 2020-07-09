@@ -1,15 +1,17 @@
 package de.music.services;
 
 import de.music.model.Tracks;
-import de.music.utils.CSVProcessor;
+import de.music.utils.MusicUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +32,7 @@ public class MusicService {
     CacheManager cacheManager;
 
     @Autowired
-    CSVProcessor csvProcessor;
+    MusicUtils musicUtils;
     @Value("${music.top.tracks.count:5}")
     public int tracksCount;
 
@@ -38,11 +40,14 @@ public class MusicService {
     public String refreshInterval;
 
     /**
-     * Method to process the data from CSV file
+     * Method to process csv files
      */
     public List<Tracks> processTopTracks() {
         LOGGER.info("Processing data from csv for the dealer {}");
-        List<Tracks> tracksList = csvProcessor.processList(cacheManager);
+        List<Tracks> tracksList = musicUtils.processTracks(cacheManager);
+
+        if(tracksList.size() <= 0)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not result found/problem with CSV reading");
 
         Collections.sort(tracksList, (o1, o2) -> o2.getAmount().compareTo(o1.getAmount()));
 
@@ -50,7 +55,7 @@ public class MusicService {
     }
 
     /**
-     *
+     * Refresh Cache method
      */
     @Scheduled(fixedDelayString = "30000")
     public void refreshCache() {
@@ -60,8 +65,7 @@ public class MusicService {
             LOGGER.warn("Thread interrupted");
         }
         LOGGER.info("refreshing cache");
-        csvProcessor.covertToEUR(USD_CUR, cacheManager);
-        csvProcessor.covertToEUR(GBP_CUR, cacheManager);
-
+        musicUtils.buildCurrencyCache(USD_CUR, cacheManager);
+        musicUtils.buildCurrencyCache(GBP_CUR, cacheManager);
     }
 }
