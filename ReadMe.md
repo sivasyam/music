@@ -21,10 +21,11 @@ mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=9090
 
 #####Implementations and assumptions made
 ``` 
-1. Calling csv files directly from the public url and reding them
-2. Used live rates currency converter API to get the live rates
-3. The very after server start fetching the currency rates and seting them into cache
-4. Refreshing the cache for every 30000 ms, by using scheduler
-5. If the rates failed to fetch from cache, directly calling currecny rates as a fall back
-6. Created integration and unit test cases, need to improve i guess
+1. Calling csv files directly from the public url and reading them.
+2. Used live rates currency converter API to get the USD and GBP rates.
+3. The very after server start up fetching the currency rates and seting them into in-memory cache.
+4. Refreshing the cache for every 30000 msnby using scheduler
+5. If the rates failed to fetch from cache, calling directely as a fall back
+6. Created integration and unit test cases, needs to improve
+7. Implemented swagger configuration
 ```
